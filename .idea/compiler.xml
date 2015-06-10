@@ -27,8 +27,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="JsfSpringIntegration" target="1.5" />
-      <module name="WebTmzCompetitors" target="1.5" />
+      <module name="WebTmzCompetitors" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

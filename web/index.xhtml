@@ -12,19 +12,30 @@
     <title><ui:insert name="title">TMZ</ui:insert></title>
 </h:head>
    <f:view>
-      <h:outputLabel value="Север Мониринга Цен конкурентов" style="font-size:24px; width: 350px; height: 40px"/>
+      <p:outputLabel value="Север Мониринга Цен конкурентов" style="font-size:48px; width: 350px; height: 40px"/>
    </f:view>
    <h:body>
 
        <h:form id="mainForm">
            <p:growl id="messages"/>
+
+           <p:commandButton value="Начать загрузку"
+                            actionListener="#{mainManagedBean.runDownloading()}"
+                            style = "width: 400px; height: 100px"
+                            update=":mainForm:messages, :mainForm:logMessageArea"/>
+
+           <br/><br/>
+
+           <p:inputTextarea rows="10" cols="50" style="width: 500px; height: 300px" value="#{mainManagedBean.logMessage}" id="logMessageArea" readonly="true"/>
+           <br/><br/>
            <p:dataTable var="data"
                         value="#{mainManagedBean.urlList}"
                         selectionMode = "single"
                         rowKey="#{data.recid}"
                         selection="#{mainManagedBean.selected}"
                         id="table"
-                        editable="true" editMode="cell">
+                        editable="true" editMode="cell"
+                        scrollable="true" scrollHeight="650">
 
                <p:ajax event="rowSelect" listener="#{mainManagedBean.selectRow()}" update="@form" />
                <p:ajax event="cellEdit" listener="#{mainManagedBean.onCellEdit}"/>
@@ -33,7 +44,7 @@
                    <h:outputText value="#{data.recid}" style="width: 800px"/>
                </p:column>
 
-               <p:column headerText="Контрагент" style="width: 150px" filterBy="#{data.competitor}">
+               <p:column headerText="Контрагент" style="width: 150px" filterBy="#{data.competitor}" sortBy="#{data.competitor}">
                    <p:cellEditor>
                        <f:facet name="output"><h:outputText value="#{data.competitor}" /></f:facet>
                        <f:facet name="input">
@@ -41,6 +52,8 @@
                                <f:selectItem itemValue="Ecco" itemLabel="Ecco" />
                                <f:selectItem itemValue="CarloPazolini" itemLabel="CarloPazolini" />
                                <f:selectItem itemValue="Mascotte" itemLabel="Mascotte" />
+                               <f:selectItem itemValue="Tj" itemLabel="Tj" />
+                               <f:selectItem itemValue="Econika" itemLabel="Econika" />
                            </p:selectOneMenu>
                        </f:facet>
                    </p:cellEditor>
@@ -60,15 +73,8 @@
                    <p:commandButton value="Удалить" actionListener="#{mainManagedBean.deleteRow(mainManagedBean.selected)}" update="@all"/>
                    <p:commandButton value="Сохранить" actionListener="#{mainManagedBean.editRow(mainManagedBean.selected)}" update="@all"/>
                </p:column>
-
            </p:dataTable>
-
-        <p:commandButton value="Start Download"
-                         actionListener="#{mainManagedBean.runDownloading('Start download 3333')}"
-                         update=":mainForm:messages"/>
-
            <br/>
-
        </h:form>
    </h:body>
 

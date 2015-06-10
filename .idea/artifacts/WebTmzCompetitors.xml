@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="JsfSpringIntegration:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/JsfSpringIntegration_war_exploded</output-path>
+  <artifact type="exploded-war" name="WebTmzCompetitors">
+    <output-path>$PROJECT_DIR$/out/artifacts/WebTmzCompetitors</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
