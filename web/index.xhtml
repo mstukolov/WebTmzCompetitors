@@ -24,21 +24,28 @@
                             style = "width: 400px; height: 100px"
                             update=":mainForm:messages, :mainForm:logMessageArea"/>
 
+           <p:commandButton value="Test"
+                            actionListener="#{mainManagedBean.getActiveReferenceList()}"
+                            style = "width: 400px; height: 100px"
+                            update="@form"/>
+
            <br/><br/>
 
            <p:inputTextarea rows="10" cols="50" style="width: 500px; height: 300px" value="#{mainManagedBean.logMessage}" id="logMessageArea" readonly="true"/>
            <br/><br/>
            <p:dataTable var="data"
                         value="#{mainManagedBean.urlList}"
-                        selectionMode = "single"
+                        selectionMode = "multiple"
                         rowKey="#{data.recid}"
-                        selection="#{mainManagedBean.selected}"
+                        selection="#{mainManagedBean.selectedReferences}"
                         id="table"
                         editable="true" editMode="cell"
                         scrollable="true" scrollHeight="650">
 
-               <p:ajax event="rowSelect" listener="#{mainManagedBean.selectRow()}" update="@form" />
+               <!--<p:ajax event="rowSelect" listener="#{mainManagedBean.selectRow()}" update="@form" />-->
                <p:ajax event="cellEdit" listener="#{mainManagedBean.onCellEdit}"/>
+
+               <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 
                <p:column headerText="Код" style="width:25px">
                    <h:outputText value="#{data.recid}" style="width: 800px"/>

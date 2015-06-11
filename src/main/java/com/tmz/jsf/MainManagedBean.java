@@ -28,7 +28,9 @@ import java.util.List;
 public class MainManagedBean implements Serializable {
 
     List<Reference> urlList = new ArrayList();
+    List<Reference> selectedReferences = new ArrayList();
     Reference selected;
+    private boolean checked;
 
     @ManagedProperty(value="#{referenceService}")
     ReferenceService referenceService;
@@ -54,6 +56,12 @@ public class MainManagedBean implements Serializable {
     public void selectRow() {
         setCurReference(selected.getReference());
         addMessage(selected.getRecid().toString());
+    }
+
+    public void getActiveReferenceList(){
+        for(Reference reference: selectedReferences){
+            addMessage(reference.getReference());
+        }
     }
 
     public void runDownloading() throws IOException {
@@ -188,5 +196,21 @@ public class MainManagedBean implements Serializable {
 
     public void increment() {
         number++;
+    }
+
+    public List<Reference> getSelectedReferences() {
+        return selectedReferences;
+    }
+
+    public void setSelectedReferences(List<Reference> selectedReferences) {
+        this.selectedReferences = selectedReferences;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
