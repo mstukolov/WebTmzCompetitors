@@ -15,4 +15,8 @@ public interface ReferenceService {
     void delete(Reference reference);
 
     List<Reference> findAll();
+
+    List<Reference> findByCompetitor(String competitor);
+
+
 }

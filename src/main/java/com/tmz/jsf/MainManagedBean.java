@@ -1,23 +1,23 @@
 package com.tmz.jsf;
 
-import com.tmz.db.dao.ReferenceDAO;
-import com.tmz.db.model.Reference;
-import com.tmz.db.service.ReferenceService;
-import com.tmz.parsing.EccoParse;
-import org.primefaces.event.CellEditEvent;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tmz.db.model.Reference;
+import com.tmz.db.service.InventTableService;
+import com.tmz.db.service.PricesCompetitorsService;
+import com.tmz.db.service.ReferenceService;
+import com.tmz.parsing.*;
+import org.primefaces.event.CellEditEvent;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,10 +29,19 @@ public class MainManagedBean implements Serializable {
 
     List<Reference> urlList = new ArrayList();
     Reference selected;
+
     @ManagedProperty(value="#{referenceService}")
     ReferenceService referenceService;
 
+    @ManagedProperty(value="#{inventTableService}")
+    InventTableService inventTableService;
+
+    @ManagedProperty(value="#{pricesCompetitorsService}")
+    PricesCompetitorsService priceService;
+
     String curReference;
+    String logMessage;
+    private int number;
 
     public MainManagedBean(){ }
 
@@ -46,10 +55,40 @@ public class MainManagedBean implements Serializable {
         setCurReference(selected.getReference());
         addMessage(selected.getRecid().toString());
     }
-    public void runDownloading(String summary) throws IOException {
-        //for(String url : urlList){addMessage(url);} addMessage(summary);
-        EccoParse eccoParse = new EccoParse();
-        eccoParse.run();
+
+    public void runDownloading() throws IOException {
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
+
+        StringBuffer sb = new StringBuffer("Запуск выгрузки....." + df.format(new Date()));
+        setLogMessage(sb.append("\r\n").toString());
+
+        setLogMessage(sb.append("Началась выгрузка Tj: " + df.format(new Date())).append("\r\n").toString());
+        ChesterParse chesterParse = new ChesterParse(inventTableService, priceService);
+        chesterParse.run(referenceService.findByCompetitor("Tj"));
+        setLogMessage(sb.append("Завершена выгрузка Tj: " + df.format(new Date())).append("\r\n").toString());
+
+        setLogMessage(sb.append("Началась выгрузка Ecco: " + df.format(new Date())).append("\r\n").toString());
+        EccoParse eccoParse = new EccoParse(inventTableService, priceService);
+        eccoParse.run(referenceService.findByCompetitor("Ecco"));
+        setLogMessage(sb.append("Завершена выгрузка Ecco: " + df.format(new Date())).append("\r\n").toString());
+
+        setLogMessage(sb.append("Началась выгрузка CarloPazolini: " + df.format(new Date())).append("\r\n").toString());
+        CarloPazoliniParse carloPazoliniParse = new CarloPazoliniParse(inventTableService, priceService);
+        carloPazoliniParse.run(referenceService.findByCompetitor("CarloPazolini"));
+        setLogMessage(sb.append("Завершена выгрузка CarloPazolini: " + df.format(new Date())).append("\r\n").toString());
+
+        setLogMessage(sb.append("Началась выгрузка Econika: " + df.format(new Date())).append("\r\n").toString());
+        EconikaParse econikaParse = new EconikaParse(inventTableService, priceService);
+        econikaParse.run(referenceService.findByCompetitor("Econika"));
+        setLogMessage(sb.append("Завершена выгрузка Econika: " + df.format(new Date())).append("\r\n").toString());
+
+        setLogMessage(sb.append("Началась выгрузка Mascotte: " + df.format(new Date())).append("\r\n").toString());
+        MascotteParse mascotteParse = new MascotteParse(inventTableService, priceService);
+        mascotteParse.run(referenceService.findByCompetitor("Mascotte"));
+        setLogMessage(sb.append("Завершена выгрузка Mascotte: " + df.format(new Date())).append("\r\n").toString());
+
+        setLogMessage(sb.append("Выгрузка завершена: " + df.format(new Date())).append("\r\n").toString());
 
     }
 
@@ -112,11 +151,42 @@ public class MainManagedBean implements Serializable {
         this.referenceService = referenceService;
     }
 
+    public InventTableService getInventTableService() {
+        return inventTableService;
+    }
+
+    public void setInventTableService(InventTableService inventTableService) {
+        this.inventTableService = inventTableService;
+    }
+
+    public PricesCompetitorsService getPriceService() {
+        return priceService;
+    }
+
+    public void setPriceService(PricesCompetitorsService priceService) {
+        this.priceService = priceService;
+    }
+
     public String getCurReference() {
         return curReference;
     }
 
     public void setCurReference(String curReference) {
         this.curReference = curReference;
+    }
+
+    public String getLogMessage() {
+        return logMessage;
+    }
+
+    public void setLogMessage(String logMessage) {
+        this.logMessage = logMessage;
+    }
+    public int getNumber() {
+        return number;
+    }
+
+    public void increment() {
+        number++;
     }
 }

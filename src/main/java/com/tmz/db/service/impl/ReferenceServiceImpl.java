@@ -32,4 +32,8 @@ public class ReferenceServiceImpl implements ReferenceService {
     public List<Reference> findAll() {
         return referenceDAO.findAll();
     }
+
+    public List<Reference> findByCompetitor(String competitor) {
+        return referenceDAO.findByCompetitor(competitor);
+    }
 }

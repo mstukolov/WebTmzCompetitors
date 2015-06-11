@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="JsfSpringIntegration:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/JsfSpringIntegration_war_exploded</output-path>
+  <artifact type="exploded-war" name="WebTmzCompetitors">
+    <output-path>$PROJECT_DIR$/out/artifacts/WebTmzCompetitors</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -78,6 +78,7 @@
           <element id="library" level="project" name="Maven: org.apache.lucene:lucene-smartcn:3.6.2" />
           <element id="library" level="project" name="Maven: org.apache.lucene:lucene-stempel:3.6.2" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.6.1" />
+          <element id="library" level="project" name="jsoup-1.7.3" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="WebTmzCompetitors/web/Web" />
