@@ -110,11 +110,11 @@ public class ChesterParse {
 
         }
         PricesCompetitors nPrice =
-                new PricesCompetitors("Tj",  //�����
-                        scu,              //�������
-                        new Date(),       //���� ����
-                        price,            //����
-                        priceFirst        //������ ����
+                new PricesCompetitors("Tj",  //контрагент
+                        scu,              //номенклатура
+                        new Date(),       //дата
+                        price,            //цена
+                        priceFirst        //первая цена
                 );
 
         InventTable inventTable =
