@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * Created by stukolov_m on 09.06.2015.
  */
@@ -43,5 +45,10 @@ public class PricesCompetitorsServiceImpl implements PricesCompetitorsService {
     @Transactional
     public void deletePrices(PricesCompetitors pricesCompetitors) {
         pricesCompetitorsDAO.deletePrices(pricesCompetitors);
+    }
+
+    @Override
+    public void deletePriceByDate(String competitor, Date date) {
+        pricesCompetitorsDAO.deletePriceByDate(competitor, date);
     }
 }

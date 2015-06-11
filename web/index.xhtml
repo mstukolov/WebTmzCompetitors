@@ -18,34 +18,52 @@
 
        <h:form id="mainForm">
            <p:growl id="messages"/>
+           <h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="5">
+                   <p:commandButton value="Начать загрузку"
+                                    actionListener="#{mainManagedBean.runDownloading()}"
+                                    style = "width: 400px; height: 100px"
+                                    update=":mainForm:messages, :mainForm:logMessageArea"/>
 
-           <p:commandButton value="Начать загрузку"
-                            actionListener="#{mainManagedBean.runDownloading()}"
-                            style = "width: 400px; height: 100px"
-                            update=":mainForm:messages, :mainForm:logMessageArea"/>
 
-           <p:commandButton value="Test"
-                            actionListener="#{mainManagedBean.getActiveReferenceList()}"
-                            style = "width: 400px; height: 100px"
-                            update="@form"/>
+                   <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                       <h:outputText value="Ecco: " />
+                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkEcco}">
+                           <p:ajax update="@form" listener="#{mainManagedBean.addMessage('Ecco is checked')}" />
+                       </p:selectBooleanCheckbox>
+                       <h:outputText value="CarloPazolini: " />
+                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkCarloPazolini}">
+                           <p:ajax update="@form" listener="#{mainManagedBean.addMessage('CarloPazolini is checked')}" />
+                       </p:selectBooleanCheckbox>
+                       <h:outputText value="Mascotte: " />
+                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkMascotte}">
+                           <p:ajax update="@form" listener="#{mainManagedBean.addMessage('Mascotte is checked')}" />
+                       </p:selectBooleanCheckbox>
+                       <h:outputText value="Tj: " />
+                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkTj}">
+                           <p:ajax update="@form" listener="#{mainManagedBean.addMessage('Tj is checked')}" />
+                       </p:selectBooleanCheckbox>
+                       <h:outputText value="Econika: " />
+                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkEconika}">
+                           <p:ajax update="@form" listener="#{mainManagedBean.addMessage('Econika is checked')}" />
+                       </p:selectBooleanCheckbox>
+                   </h:panelGrid>
 
-           <br/><br/>
+                   <br/><br/>
 
-           <p:inputTextarea rows="10" cols="50" style="width: 500px; height: 300px" value="#{mainManagedBean.logMessage}" id="logMessageArea" readonly="true"/>
+                   <p:inputTextarea rows="10" cols="50" style="width: 500px; height: 300px" value="#{mainManagedBean.logMessage}" id="logMessageArea" readonly="true"/>
+           </h:panelGrid>
            <br/><br/>
            <p:dataTable var="data"
                         value="#{mainManagedBean.urlList}"
-                        selectionMode = "multiple"
+                        selectionMode = "single"
                         rowKey="#{data.recid}"
-                        selection="#{mainManagedBean.selectedReferences}"
+                        selection="#{mainManagedBean.selected}"
                         id="table"
                         editable="true" editMode="cell"
                         scrollable="true" scrollHeight="650">
 
-               <!--<p:ajax event="rowSelect" listener="#{mainManagedBean.selectRow()}" update="@form" />-->
+               <p:ajax event="rowSelect" listener="#{mainManagedBean.selectRow()}" update="@form" />
                <p:ajax event="cellEdit" listener="#{mainManagedBean.onCellEdit}"/>
-
-               <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
 
                <p:column headerText="Код" style="width:25px">
                    <h:outputText value="#{data.recid}" style="width: 800px"/>
@@ -75,7 +93,7 @@
                    </p:cellEditor>
                </p:column>
 
-               <p:column headerText="Операция" rendered="true">
+               <p:column headerText="Операция">
                    <p:commandButton value="Создать" actionListener="#{mainManagedBean.addNewRow('Ecco')}" update="@all"/>
                    <p:commandButton value="Удалить" actionListener="#{mainManagedBean.deleteRow(mainManagedBean.selected)}" update="@all"/>
                    <p:commandButton value="Сохранить" actionListener="#{mainManagedBean.editRow(mainManagedBean.selected)}" update="@all"/>

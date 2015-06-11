@@ -36,7 +36,7 @@ public class EconikaParse {
     }
 
     public void run(List<Reference> urls) throws IOException {
-        category = "женская";
+        category = "Р¶РµРЅСЃРєР°СЏ";
         i = 0;
 
         for(Reference url : urls){
@@ -68,7 +68,7 @@ public class EconikaParse {
         item = docSCU.select("div.item-attr > dl > dd").get(0).text();
         price = docSCU.select(".price-current").first().text().split(" ")[0].replaceAll("\\D", "");
 
-        //STUM 16.01.2015 Добавление зачеркнутой(первой) цены-------
+        //STUM 16.01.2015 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅ-------
         try {
             priceFirst = docSCU.select(".price-old").first().text().split(" ")[0].replaceAll("\\D", "");
         }catch(NullPointerException ex){priceFirst = price;}
@@ -86,10 +86,10 @@ public class EconikaParse {
                                      Integer price,
                                      Integer priceFirst,
                                      String category, Elements pElems) throws UnsupportedEncodingException {
-        String upperMaterial = new String("Материал верха".getBytes("UTF8"));
-        String soleMaterial = new String("Материал подошвы".getBytes("UTF8"));
-        String liningMaterial = new String("Материал подкладки".getBytes("UTF8"));
-        String countryElement = new String("Страна производства".getBytes("UTF8"));
+        String upperMaterial = new String("РњР°С‚РµСЂРёР°Р» РІРµСЂС…Р°".getBytes("UTF8"));
+        String soleMaterial = new String("РњР°С‚РµСЂРёР°Р» РїРѕРґРѕС€РІС‹".getBytes("UTF8"));
+        String liningMaterial = new String("РњР°С‚РµСЂРёР°Р» РїРѕРґРєР»Р°РґРєРё".getBytes("UTF8"));
+        String countryElement = new String("РЎС‚СЂР°РЅР° РїСЂРѕРёР·РІРѕРґСЃС‚РІР°".getBytes("UTF8"));
 
         String upper= "", lining = "", sole = "", country = "";
 
@@ -99,11 +99,11 @@ public class EconikaParse {
 
 
         PricesCompetitors nPrice =
-                new PricesCompetitors("Econika",  //Бренд
-                        scu,              //Артикул
-                        new Date(),       //Дата цены
-                        price,            //цена
-                        priceFirst        //Первая цена
+                new PricesCompetitors("Econika",  //пїЅпїЅпїЅпїЅпїЅ
+                        scu,              //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                        new Date(),       //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+                        price,            //пїЅпїЅпїЅпїЅ
+                        priceFirst        //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
                 );
 
         InventTable inventTable =
@@ -125,24 +125,24 @@ public class EconikaParse {
     public void writeDB(List<InventTable> items, List<PricesCompetitors> prices){
 
         SimpleDateFormat df = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
-        System.out.println("Налачась запись в базу данных:  " + df.format(new Date()));
-        System.out.println("Кол-во загруженных цен: " + prices.size());
+        System.out.println("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ:  " + df.format(new Date()));
+        System.out.println("пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ: " + prices.size());
 
-        //Создание нового артикула
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         for(InventTable inventTable : items) {
             if(inventTableService.findScu(inventTable) == null){inventTableService.persistScu(inventTable);}
         }
-        //Запись цены
+        //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
         for(PricesCompetitors price : prices) {
             priceService.persistPrices(price);
         }
-        System.out.println("Закончилась запись в базу данных: " + df.format(new Date()));
-        System.out.println("Кол-во не загруженных SCU: " + timeoutErrors);
+        System.out.println("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: " + df.format(new Date()));
+        System.out.println("пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ SCU: " + timeoutErrors);
 
     }
     public static void printErrors(){
         if(errUpload.size() > 0){ for(String err : errUpload){System.out.println(err);}}
-        else{System.out.println("Ошибки не обнаружены");}
+        else{System.out.println("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");}
     }
     public static String  trimElement(String s){
 

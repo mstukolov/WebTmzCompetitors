@@ -42,9 +42,9 @@ public class EccoParse {
 
         for(Reference url : urls){
 
-            if       (url.getReference().contains("/men/")) {category = "мужская";}
-            else if  (url.getReference().contains("/women/")){category = "женская";}
-            else if  (url.getReference().contains("/kids/")){category = "детская";}
+            if       (url.getReference().contains("/men/")) {category = "РјСѓР¶СЃРєР°СЏ";}
+            else if  (url.getReference().contains("/women/")){category = "Р¶РµРЅСЃРєР°СЏ";}
+            else if  (url.getReference().contains("/kids/")){category = "РґРµС‚СЃРєР°СЏ";}
 
             System.out.println("Start parse URL = " + url.getReference());
 
@@ -73,7 +73,7 @@ public class EccoParse {
             item = trimElement(docSCU.select("div.block > p.art").first().text());
             price = docSCU.select("dd.new").first().text().replaceAll("([^\\d])+", "");
 
-            //STUM 16.01.2015 Добавление зачеркнутой(первой) цены-------
+            //STUM 16.01.2015 Р”РѕР±Р°РІР»РµРЅР° РїРµСЂРІР°СЏ С†РµРЅР°-------
             try {
                 priceFirst = docSCU.select("dd.old").first().text().replaceAll("([^\\d])+", "");
             }catch(NullPointerException ex){priceFirst = price;}
@@ -92,10 +92,10 @@ public class EccoParse {
     public static void parseElements(String scu, String kindshoes,
                                      Integer price, Integer priceFirst,
                                      String category, Elements pElems) throws UnsupportedEncodingException {
-        String upperMaterial = new String("Верх".getBytes("UTF8"));
-        String soleMaterial = new String("Подошва".getBytes("UTF8"));
-        String liningMaterial = new String("Подкладка".getBytes("UTF8"));
-        String countryElement = new String("Страна производства".getBytes("UTF8"));
+        String upperMaterial = new String("Р’РµСЂС…".getBytes("UTF8"));
+        String soleMaterial = new String("РџРѕРґРѕС€РІР°".getBytes("UTF8"));
+        String liningMaterial = new String("РџРѕРґРєР»Р°РґРєР°".getBytes("UTF8"));
+        String countryElement = new String("РЎС‚СЂР°РЅР° РїСЂРѕРёР·РІРѕРґСЃС‚РІР°".getBytes("UTF8"));
 
         String upper= "", lining = "", sole = "", country = "";
 
@@ -108,11 +108,11 @@ public class EccoParse {
 
         }
         PricesCompetitors nPrice =
-                new PricesCompetitors("Ecco",  //Бренд
-                        scu,              //Артикул
-                        new Date(),       //Дата цены
-                        price,            //цена
-                        priceFirst        //Первая цена
+                new PricesCompetitors("Ecco",  //пїЅпїЅпїЅпїЅпїЅ
+                        scu,              //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                        new Date(),       //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+                        price,            //пїЅпїЅпїЅпїЅ
+                        priceFirst        //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
                 );
 
         InventTable inventTable =
@@ -134,22 +134,22 @@ public class EccoParse {
     public void writeDB(List<InventTable> items, List<PricesCompetitors> prices){
 
         SimpleDateFormat df = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
-        System.out.println("Налачась запись в базу данных:  " + df.format(new Date()));
-        System.out.println("Кол-во загруженных цен: " + prices.size());
+        System.out.println("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ:  " + df.format(new Date()));
+        System.out.println("пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ: " + prices.size());
 
 //        InventTableService inventTableService = (InventTableService) context.getBean("inventTableService");
 //        PricesCompetitorsService priceService = (PricesCompetitorsService) context.getBean("pricesCompetitorsService");
 
-        //Создание нового артикула
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         for(InventTable inventTable : items) {
             if(inventTableService.findScu(inventTable) == null){inventTableService.persistScu(inventTable);}
         }
-        //Запись цены
+        //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
         for(PricesCompetitors price : prices) {
             priceService.persistPrices(price);
         }
-        System.out.println("Закончилась запись в базу данных: " + df.format(new Date()));
-        System.out.println("Кол-во не загруженных SCU: " + timeoutErrors);
+        System.out.println("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: " + df.format(new Date()));
+        System.out.println("пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ SCU: " + timeoutErrors);
 
     }
     public static String  trimElement(String s){

@@ -43,8 +43,8 @@ public class CarloPazoliniParse {
 
         for(Reference url : urls){
 
-            if       (url.getReference().contains("/men/")) {category = "мужская";}
-            else if  (url.getReference().contains("/women/")){category = "женская";}
+            if       (url.getReference().contains("/men/")) {category = "РјСѓР¶СЃРєР°СЏ";}
+            else if  (url.getReference().contains("/women/")){category = "Р¶РµРЅСЃРєР°СЏ";}
 
             Document document = Jsoup.connect(url.getReference()).timeout(100 * 10000000).get();
             Elements links = document.select("a[href].content");
@@ -74,7 +74,7 @@ public class CarloPazoliniParse {
         item = docSCU.select("h3").first().text();
         price = docSCU.select("p.price.size25").first().text();
 
-        //STUM 16.01.2015 Добавление зачеркнутой(первой) цены
+        //STUM 16.01.2015 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅ
         try {
             priceFirst = docSCU.select("div.col-md-5 > p.price.size15").first().text();
         }catch(NullPointerException ex){priceFirst = price;}
@@ -91,10 +91,10 @@ public class CarloPazoliniParse {
     public static void parseElements(String scu, String kindshoes,
                                      Integer price,Integer priceFirst,
                                      String category, Elements pElems) throws UnsupportedEncodingException {
-        String upperMaterial = new String("Материал верха".getBytes("UTF8"));
-        String soleMaterial = new String("Материал подошвы".getBytes("UTF8"));
-        String liningMaterial = new String("Материал подкладки".getBytes("UTF8"));
-        String countryElement = new String("Страна производства".getBytes("UTF8"));
+        String upperMaterial = new String("РњР°С‚РµСЂРёР°Р» РІРµСЂС…Р°".getBytes("UTF8"));
+        String soleMaterial = new String("РњР°С‚РµСЂРёР°Р» РїРѕРґРѕС€РІС‹".getBytes("UTF8"));
+        String liningMaterial = new String("РњР°С‚РµСЂРёР°Р» РїРѕРґРєР»Р°РґРєРё".getBytes("UTF8"));
+        String countryElement = new String("РЎС‚СЂР°РЅР° РїСЂРѕРёР·РІРѕРґСЃС‚РІР°".getBytes("UTF8"));
 
         String upper= "", lining = "", sole = "", country = "";
 
@@ -106,11 +106,11 @@ public class CarloPazoliniParse {
 
         }
         PricesCompetitors nPrice =
-                new PricesCompetitors("CarloPazolini",  //Бренд
-                        scu,              //Артикул
-                        new Date(),       //Дата цены
-                        price,            //цена
-                        priceFirst        //Первая цена
+                new PricesCompetitors("CarloPazolini",  //пїЅпїЅпїЅпїЅпїЅ
+                        scu,              //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                        new Date(),       //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+                        price,            //пїЅпїЅпїЅпїЅ
+                        priceFirst        //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
                 );
 
         InventTable inventTable =
@@ -132,24 +132,24 @@ public class CarloPazoliniParse {
     public void writeDB(List<InventTable> items, List<PricesCompetitors> prices){
 
         SimpleDateFormat df = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
-        System.out.println("Налачась запись в базу данных:  " + df.format(new Date()));
-        System.out.println("Кол-во загруженных цен: " + prices.size());
+        System.out.println("РќР°Р»Р°С‡Р°СЃСЊ Р·Р°РїРёСЃСЊ РІ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…:  " + df.format(new Date()));
+        System.out.println("РљРѕР»-РІРѕ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… С†РµРЅ:  " + prices.size());
 
-        //Создание нового артикула
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         for(InventTable inventTable : items) {
             if(inventTableService.findScu(inventTable) == null){inventTableService.persistScu(inventTable);}
         }
-        //Запись цены
+        //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
         for(PricesCompetitors price : prices) {
             priceService.persistPrices(price);
         }
-        System.out.println("Закончилась запись в базу данных: " + df.format(new Date()));
-        System.out.println("Кол-во не загруженных SCU: " + timeoutErrors);
+        System.out.println("Р—Р°РєРѕРЅС‡РёР»Р°СЃСЊ Р·Р°РїРёСЃСЊ РІ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…:  " + df.format(new Date()));
+        System.out.println("РљРѕР»-РІРѕ РЅРµ Р·Р°РіСЂСѓР¶РµРЅРЅС‹С… SCU: " + timeoutErrors);
 
     }
     public static void printErrors(){
         if(errUpload.size() > 0){ for(String err : errUpload){System.out.println(err);}}
-        else{System.out.println("Ошибки не обнаружены");}
+        else{System.out.println("РћС€РёР±РєРё РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅС‹");}
     }
     public static String  trimElement(String s){
 

@@ -8,9 +8,9 @@ import com.tmz.db.model.InventTable;
 public interface InventTableDAO {
     void persistScu(InventTable inventTable);
 
-    InventTable findScuByCompetitor(String id); //поиск товара по продавцу-конкуренту
+    InventTable findScuByCompetitor(String id);
 
-    InventTable findScu(InventTable inventTable); // поиск товара по артикулу
+    InventTable findScu(InventTable inventTable);
 
     void updateScu(InventTable inventTable);
 

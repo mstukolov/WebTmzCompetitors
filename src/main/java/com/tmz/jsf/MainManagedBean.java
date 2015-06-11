@@ -30,7 +30,7 @@ public class MainManagedBean implements Serializable {
     List<Reference> urlList = new ArrayList();
     List<Reference> selectedReferences = new ArrayList();
     Reference selected;
-    private boolean checked;
+    private boolean chkEcco, chkCarloPazolini, chkMascotte, chkTj, chkEconika;
 
     @ManagedProperty(value="#{referenceService}")
     ReferenceService referenceService;
@@ -71,42 +71,47 @@ public class MainManagedBean implements Serializable {
         StringBuffer sb = new StringBuffer("Запуск выгрузки....." + df.format(new Date()));
         setLogMessage(sb.append("\r\n").toString());
 
-        setLogMessage(sb.append("Началась выгрузка Tj: " + df.format(new Date())).append("\r\n").toString());
-        ChesterParse chesterParse = new ChesterParse(inventTableService, priceService);
-        chesterParse.run(referenceService.findByCompetitor("Tj"));
-        setLogMessage(sb.append("Завершена выгрузка Tj: " + df.format(new Date())).append("\r\n").toString());
+        if(chkTj == true){
 
-        setLogMessage(sb.append("Началась выгрузка Ecco: " + df.format(new Date())).append("\r\n").toString());
-        EccoParse eccoParse = new EccoParse(inventTableService, priceService);
-        eccoParse.run(referenceService.findByCompetitor("Ecco"));
-        setLogMessage(sb.append("Завершена выгрузка Ecco: " + df.format(new Date())).append("\r\n").toString());
-
-        setLogMessage(sb.append("Началась выгрузка CarloPazolini: " + df.format(new Date())).append("\r\n").toString());
-        CarloPazoliniParse carloPazoliniParse = new CarloPazoliniParse(inventTableService, priceService);
-        carloPazoliniParse.run(referenceService.findByCompetitor("CarloPazolini"));
-        setLogMessage(sb.append("Завершена выгрузка CarloPazolini: " + df.format(new Date())).append("\r\n").toString());
-
-        setLogMessage(sb.append("Началась выгрузка Econika: " + df.format(new Date())).append("\r\n").toString());
-        EconikaParse econikaParse = new EconikaParse(inventTableService, priceService);
-        econikaParse.run(referenceService.findByCompetitor("Econika"));
-        setLogMessage(sb.append("Завершена выгрузка Econika: " + df.format(new Date())).append("\r\n").toString());
-
-        setLogMessage(sb.append("Началась выгрузка Mascotte: " + df.format(new Date())).append("\r\n").toString());
-        MascotteParse mascotteParse = new MascotteParse(inventTableService, priceService);
-        mascotteParse.run(referenceService.findByCompetitor("Mascotte"));
-        setLogMessage(sb.append("Завершена выгрузка Mascotte: " + df.format(new Date())).append("\r\n").toString());
-
+                setLogMessage(sb.append("Началась выгрузка Tj: " + df.format(new Date())).append("\r\n").toString());
+                priceService.deletePriceByDate("Tj", new Date());
+                ChesterParse chesterParse = new ChesterParse(inventTableService, priceService);
+                chesterParse.run(referenceService.findByCompetitor("Tj"));
+                setLogMessage(sb.append("Завершена выгрузка Tj: " + df.format(new Date())).append("\r\n").toString());
+        }
+        if(chkEcco == true){
+                setLogMessage(sb.append("Началась выгрузка Ecco: " + df.format(new Date())).append("\r\n").toString());
+                EccoParse eccoParse = new EccoParse(inventTableService, priceService);
+                eccoParse.run(referenceService.findByCompetitor("Ecco"));
+                setLogMessage(sb.append("Завершена выгрузка Ecco: " + df.format(new Date())).append("\r\n").toString());
+        }
+        if(chkCarloPazolini == true){
+                setLogMessage(sb.append("Началась выгрузка CarloPazolini: " + df.format(new Date())).append("\r\n").toString());
+                CarloPazoliniParse carloPazoliniParse = new CarloPazoliniParse(inventTableService, priceService);
+                carloPazoliniParse.run(referenceService.findByCompetitor("CarloPazolini"));
+                setLogMessage(sb.append("Завершена выгрузка CarloPazolini: " + df.format(new Date())).append("\r\n").toString());
+        }
+        if(chkEconika == true){
+                setLogMessage(sb.append("Началась выгрузка Econika: " + df.format(new Date())).append("\r\n").toString());
+                EconikaParse econikaParse = new EconikaParse(inventTableService, priceService);
+                econikaParse.run(referenceService.findByCompetitor("Econika"));
+                setLogMessage(sb.append("Завершена выгрузка Econika: " + df.format(new Date())).append("\r\n").toString());
+        }
+        if(chkMascotte == true){
+            setLogMessage(sb.append("Началась выгрузка Mascotte: " + df.format(new Date())).append("\r\n").toString());
+            MascotteParse mascotteParse = new MascotteParse(inventTableService, priceService);
+            mascotteParse.run(referenceService.findByCompetitor("Mascotte"));
+            setLogMessage(sb.append("Завершена выгрузка Mascotte: " + df.format(new Date())).append("\r\n").toString());
+        }
         setLogMessage(sb.append("Выгрузка завершена: " + df.format(new Date())).append("\r\n").toString());
 
     }
 
-    public void saveReferences() throws IOException {
-
-    }
     public void onCellEdit(CellEditEvent event) {
         Object oldValue = event.getOldValue();
         Object newValue = event.getNewValue();
 
+        selected.setReference(newValue.toString());
         referenceService.update(selected);
         addMessage("Строка сохранена!");
 
@@ -206,11 +211,43 @@ public class MainManagedBean implements Serializable {
         this.selectedReferences = selectedReferences;
     }
 
-    public boolean isChecked() {
-        return checked;
+    public boolean isChkEcco() {
+        return chkEcco;
     }
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
+    public void setChkEcco(boolean chkEcco) {
+        this.chkEcco = chkEcco;
+    }
+
+    public boolean isChkCarloPazolini() {
+        return chkCarloPazolini;
+    }
+
+    public void setChkCarloPazolini(boolean chkCarloPazolini) {
+        this.chkCarloPazolini = chkCarloPazolini;
+    }
+
+    public boolean isChkMascotte() {
+        return chkMascotte;
+    }
+
+    public void setChkMascotte(boolean chkMascotte) {
+        this.chkMascotte = chkMascotte;
+    }
+
+    public boolean isChkTj() {
+        return chkTj;
+    }
+
+    public void setChkTj(boolean chkTj) {
+        this.chkTj = chkTj;
+    }
+
+    public boolean isChkEconika() {
+        return chkEconika;
+    }
+
+    public void setChkEconika(boolean chkEconika) {
+        this.chkEconika = chkEconika;
     }
 }

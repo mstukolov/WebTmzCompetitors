@@ -47,7 +47,7 @@ public class ChesterParse {
             parsePage(url.getReference());
 
         }
-        //writeDB(items, prices);
+        writeDB(items, prices);
         printErrors();
     }
     private static void parsePage(String _current) throws IOException {

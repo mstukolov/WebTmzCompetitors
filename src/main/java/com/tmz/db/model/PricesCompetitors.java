@@ -27,6 +27,7 @@ public class PricesCompetitors {
     private String scu;
 
     @Column(name = "priceDate", nullable = false)
+    @Field(index = Index.YES, store = Store.NO, analyze = Analyze.YES)
     private Date priceDate;
 
     @Column(name = "price", nullable = false)

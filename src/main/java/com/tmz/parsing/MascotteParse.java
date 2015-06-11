@@ -49,8 +49,8 @@ public class MascotteParse {
 
         for(Reference url : urls){
 
-            if (url.getReference().contains("/dlya-muzhchin")) {category = "мужская";}
-            if  (url.getReference().contains("/dlya-zhenshchin")){category = "женская";}
+            if (url.getReference().contains("/dlya-muzhchin")) {category = "РјСѓР¶СЃРєР°СЏ";}
+            if  (url.getReference().contains("/dlya-zhenshchin")){category = "Р¶РµРЅСЃРєР°СЏ";}
 
             Document document = Jsoup.connect(url.getReference()).cookies(cookiesMap).timeout(100 * 10000000).get();
             Element activePage = document.select("ul.pagination > li.active > a[href]").first();
@@ -104,7 +104,7 @@ public class MascotteParse {
         kindshoes =  docSCU.select("a[href]").get(33).text();
         price = docSCU.select("div.main-price").text().replaceAll("\\D","");
 
-        //STUM 16.01.2015 Добавление зачеркнутой(первой) цены
+        //STUM 16.01.2015 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅ
         try {
             Elements priceFirstElements = docSCU.select("div.old-price");
             if(!priceFirstElements.isEmpty()){
@@ -127,10 +127,10 @@ public class MascotteParse {
     public static void parseElements(String scu, String kindshoes,
                                      Integer price, Integer priceFirst,
                                      String category, Elements pElems) throws UnsupportedEncodingException {
-        String upperMaterial = new String("Материал".getBytes("UTF8"));
-        String soleMaterial = new String("Материал подошвы".getBytes("UTF8"));
-        String liningMaterial = new String("Материал подкладки".getBytes("UTF8"));
-        String countryElement = new String("Страна".getBytes("UTF8"));
+        String upperMaterial = new String("РњР°С‚РµСЂРёР°Р»".getBytes("UTF8"));
+        String soleMaterial = new String("РњР°С‚РµСЂРёР°Р» РїРѕРґРѕС€РІС‹".getBytes("UTF8"));
+        String liningMaterial = new String("РњР°С‚РµСЂРёР°Р» РїРѕРґРєР»Р°РґРєРё".getBytes("UTF8"));
+        String countryElement = new String("РЎС‚СЂР°РЅР°".getBytes("UTF8"));
 
         String upper= "", lining = "", sole = "", country = "";
 
@@ -146,11 +146,11 @@ public class MascotteParse {
 
         }
         PricesCompetitors nPrice =
-                new PricesCompetitors("Mascotte",  //Бренд
-                        scu,              //Артикул
-                        new Date(),       //Дата цены
-                        price,             //цена
-                        priceFirst        //Первая цена
+                new PricesCompetitors("Mascotte",  //пїЅпїЅпїЅпїЅпїЅ
+                        scu,              //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                        new Date(),       //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+                        price,             //пїЅпїЅпїЅпїЅ
+                        priceFirst        //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
                 );
         InventTable inventTable =
                 new InventTable(scu,
@@ -173,24 +173,24 @@ public class MascotteParse {
     public void writeDB(List<InventTable> items, List<PricesCompetitors> prices){
 
         SimpleDateFormat df = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
-        System.out.println("Налачась запись в базу данных:  " + df.format(new Date()));
-        System.out.println("Кол-во загруженных цен: " + prices.size());
+        System.out.println("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ:  " + df.format(new Date()));
+        System.out.println("пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ: " + prices.size());
 
-        //Создание нового артикула
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         for(InventTable inventTable : items) {
             if(inventTableService.findScu(inventTable) == null){inventTableService.persistScu(inventTable);}
         }
-        //Запись цены
+        //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
         for(PricesCompetitors price : prices) {
             priceService.persistPrices(price);
         }
-        System.out.println("Закончилась запись в базу данных: " + df.format(new Date()));
-        System.out.println("Кол-во не загруженных SCU: " + timeoutErrors);
+        System.out.println("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ: " + df.format(new Date()));
+        System.out.println("пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ SCU: " + timeoutErrors);
 
     }
 
     public static String  trimArtikul(String s) {
-        return s.substring(s.lastIndexOf("Артикул") + 8);
+        return s.substring(s.lastIndexOf("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ") + 8);
     }
 
     public static String  trimElement(String s){
