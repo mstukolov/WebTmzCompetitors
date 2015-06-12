@@ -6,6 +6,7 @@ import com.tmz.db.model.Reference;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
@@ -77,10 +78,9 @@ public class PricesCompetitorsDAOImpl implements PricesCompetitorsDAO {
             competitorBJ.should(queryBuilder.phrase().onField("competitor").sentence(competitor).createQuery());
             booleanQuery.add(competitorBJ.createQuery(), BooleanClause.Occur.MUST);
         }
+        Date today = new Date();
+        Date yesterday = new Date(today.getTime() - (1000 * 60 * 60 * 24));
         if (date != null) {
-
-            Date today = new Date();
-            Date yesterday = new Date(today.getTime() - (1000 * 60 * 60 * 24));
 
             BooleanJunction<BooleanJunction> dateBJ = queryBuilder.bool();
             dateBJ.should(queryBuilder.range().onField("priceDate").above(yesterday).createQuery());
@@ -88,10 +88,13 @@ public class PricesCompetitorsDAOImpl implements PricesCompetitorsDAO {
         }
 
         List<PricesCompetitors> result = fullTextSession.createFullTextQuery(booleanQuery, PricesCompetitors.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-        for(PricesCompetitors pricesCompetitors : result){
-            sessionFactory.getCurrentSession().delete(pricesCompetitors);
-        }
-        sessionFactory.getCurrentSession().flush();
+//        for(PricesCompetitors pricesCompetitors : result){
+//            sessionFactory.getCurrentSession().delete(pricesCompetitors);
+//        }
+        String queryStr = "delete from PricesCompetitors where priceDate > :DATE";
+        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        query.setParameter("DATE", yesterday);
+        int res = query.executeUpdate();
     }
 
     public SessionFactory getSessionFactory() {
