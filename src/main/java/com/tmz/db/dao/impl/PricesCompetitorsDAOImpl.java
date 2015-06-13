@@ -61,39 +61,16 @@ public class PricesCompetitorsDAOImpl implements PricesCompetitorsDAO {
     @Override
     public void deletePriceByDate(String competitor, Date date) {
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyyy-mm-dd");
         fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
 
-        try {
-            fullTextSession.createIndexer(PricesCompetitors.class).startAndWait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        QueryBuilder queryBuilder = fullTextSession.getSearchFactory().buildQueryBuilder().forEntity(PricesCompetitors.class).get();
-        BooleanQuery booleanQuery = new BooleanQuery();
-
-
-        if (competitor != null) {
-            BooleanJunction<BooleanJunction> competitorBJ = queryBuilder.bool();
-            competitorBJ.should(queryBuilder.phrase().onField("competitor").sentence(competitor).createQuery());
-            booleanQuery.add(competitorBJ.createQuery(), BooleanClause.Occur.MUST);
-        }
         Date today = new Date();
         Date yesterday = new Date(today.getTime() - (1000 * 60 * 60 * 24));
-        if (date != null) {
 
-            BooleanJunction<BooleanJunction> dateBJ = queryBuilder.bool();
-            dateBJ.should(queryBuilder.range().onField("priceDate").above(yesterday).createQuery());
-            booleanQuery.add(dateBJ.createQuery(), BooleanClause.Occur.MUST);
-        }
-
-        List<PricesCompetitors> result = fullTextSession.createFullTextQuery(booleanQuery, PricesCompetitors.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
-//        for(PricesCompetitors pricesCompetitors : result){
-//            sessionFactory.getCurrentSession().delete(pricesCompetitors);
-//        }
-        String queryStr = "delete from PricesCompetitors where priceDate > :DATE";
-        Query query = sessionFactory.getCurrentSession().createQuery(queryStr);
+        String queryStr = "delete from PricesCompetitors where priceDate > :DATE and competitor = :COMP";
+        Query query = getSessionFactory().getCurrentSession().createQuery(queryStr);
         query.setParameter("DATE", yesterday);
+        query.setParameter("COMP", competitor);
+
         int res = query.executeUpdate();
     }
 

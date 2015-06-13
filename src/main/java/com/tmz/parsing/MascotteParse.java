@@ -36,6 +36,9 @@ public class MascotteParse {
 
     public void run(List<Reference> urls) throws IOException {
         i = 0;
+        //Удаление элементов с последней сессии загрузки
+        prices.clear();
+        items.clear();
         System.out.println("Start parse MASCOTTE...");
         String main = "https://shop.mascotte.ru/";
 

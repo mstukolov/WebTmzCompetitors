@@ -1,6 +1,7 @@
 package com.tmz.jsf;
 
 
+import com.tmz.db.model.PricesCompetitors;
 import com.tmz.db.model.Reference;
 import com.tmz.db.service.InventTableService;
 import com.tmz.db.service.PricesCompetitorsService;
@@ -72,7 +73,6 @@ public class MainManagedBean implements Serializable {
         setLogMessage(sb.append("\r\n").toString());
 
         if(chkTj == true){
-
                 setLogMessage(sb.append("Началась выгрузка Tj: " + df.format(new Date())).append("\r\n").toString());
                 priceService.deletePriceByDate("Tj", new Date());
                 ChesterParse chesterParse = new ChesterParse(inventTableService, priceService);

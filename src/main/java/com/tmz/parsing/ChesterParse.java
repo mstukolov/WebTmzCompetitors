@@ -39,6 +39,9 @@ public class ChesterParse {
 
     public void run(List<Reference> urls) throws IOException {
         i = 0;
+        //Удаление элементов с последней сессии загрузки
+        prices.clear();
+        items.clear();
 
         for(Reference url : urls){
 
@@ -120,7 +123,10 @@ public class ChesterParse {
         InventTable inventTable =
                 new InventTable(scu,
                         "Tj",
-                        new String(category.getBytes(),"utf-8"),
+                        //new String(category.getBytes(),"utf-8"),
+                        new String("man".getBytes(),"utf-8"),
+
+
                         kindshoes,
                         new String(upper.getBytes(), "utf8"),
                         lining,
@@ -168,5 +174,40 @@ public class ChesterParse {
 
         return nonclasslnk;
 
+    }
+    public void createTestData(){
+
+        prices.clear();
+        items.clear();
+
+        PricesCompetitors prices1 = new PricesCompetitors();
+        prices1.setCompetitor("Tj");
+        prices1.setScu("SCU#1");
+        prices1.setPrice(1005);
+        prices1.setPriceFirst(0);
+        prices1.setPriceDate(new Date());
+
+        PricesCompetitors prices2 = new PricesCompetitors();
+        prices2.setCompetitor("Tj");
+        prices2.setScu("SCU#2");
+        prices2.setPrice(1005);
+        prices2.setPriceFirst(0);
+        prices2.setPriceDate(new Date());
+
+        InventTable inventTable1 = new InventTable();
+        inventTable1.setScu("SCU#1");
+        inventTable1.setCompetitor("Tj");
+
+        InventTable inventTable2 = new InventTable();
+        inventTable2.setScu("SCU#2");
+        inventTable2.setCompetitor("Tj");
+
+        prices.add(prices1);
+        prices.add(prices2);
+
+        items.add(inventTable1);
+        items.add(inventTable2);
+
+        writeDB(items, prices);
     }
 }

@@ -40,7 +40,9 @@ public class CarloPazoliniParse {
 
     public void run(List<Reference> urls) throws IOException {
         i = 0;
-
+        //Удаление элементов с последней сессии загрузки
+        prices.clear();
+        items.clear();
         for(Reference url : urls){
 
             if       (url.getReference().contains("/men/")) {category = "мужская";}

@@ -38,7 +38,9 @@ public class EconikaParse {
     public void run(List<Reference> urls) throws IOException {
         category = "женская";
         i = 0;
-
+        //Удаление элементов с последней сессии загрузки
+        prices.clear();
+        items.clear();
         for(Reference url : urls){
 
             Document document = Jsoup.connect(url.getReference()).timeout(100 * 10000000).get();

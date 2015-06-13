@@ -38,6 +38,9 @@ public class EccoParse {
 
     public void run(List<Reference> urls) throws IOException {
         i = 0;
+        //Удаление элементов с последней сессии загрузки
+        prices.clear();
+        items.clear();
         System.out.println("Start parse Ecco...");
 
         for(Reference url : urls){
