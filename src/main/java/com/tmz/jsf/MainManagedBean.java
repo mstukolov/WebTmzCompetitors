@@ -74,6 +74,7 @@ public class MainManagedBean implements Serializable {
 
         if(chkTj == true){
                 setLogMessage(sb.append("Началась выгрузка Tj: " + df.format(new Date())).append("\r\n").toString());
+                //Remove data for current day
                 priceService.deletePriceByDate("Tj", new Date());
                 ChesterParse chesterParse = new ChesterParse(inventTableService, priceService);
                 chesterParse.run(referenceService.findByCompetitor("Tj"));
