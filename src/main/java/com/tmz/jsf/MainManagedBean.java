@@ -81,6 +81,7 @@ public class MainManagedBean implements Serializable {
                 setLogMessage(sb.append("Завершена выгрузка Tj: " + df.format(new Date())).append("\r\n").toString());
         }
         if(chkEcco == true){
+
                 setLogMessage(sb.append("Началась выгрузка Ecco: " + df.format(new Date())).append("\r\n").toString());
                 priceService.deletePriceByDate("Ecco", new Date());
                 EccoParse eccoParse = new EccoParse(inventTableService, priceService);
