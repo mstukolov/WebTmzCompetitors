@@ -81,24 +81,28 @@ public class MainManagedBean implements Serializable {
         }
         if(chkEcco == true){
                 setLogMessage(sb.append("Началась выгрузка Ecco: " + df.format(new Date())).append("\r\n").toString());
+                priceService.deletePriceByDate("Ecco", new Date());
                 EccoParse eccoParse = new EccoParse(inventTableService, priceService);
                 eccoParse.run(referenceService.findByCompetitor("Ecco"));
                 setLogMessage(sb.append("Завершена выгрузка Ecco: " + df.format(new Date())).append("\r\n").toString());
         }
         if(chkCarloPazolini == true){
                 setLogMessage(sb.append("Началась выгрузка CarloPazolini: " + df.format(new Date())).append("\r\n").toString());
+                priceService.deletePriceByDate("CarloPazolini", new Date());
                 CarloPazoliniParse carloPazoliniParse = new CarloPazoliniParse(inventTableService, priceService);
                 carloPazoliniParse.run(referenceService.findByCompetitor("CarloPazolini"));
                 setLogMessage(sb.append("Завершена выгрузка CarloPazolini: " + df.format(new Date())).append("\r\n").toString());
         }
         if(chkEconika == true){
                 setLogMessage(sb.append("Началась выгрузка Econika: " + df.format(new Date())).append("\r\n").toString());
+                priceService.deletePriceByDate("Econika", new Date());
                 EconikaParse econikaParse = new EconikaParse(inventTableService, priceService);
                 econikaParse.run(referenceService.findByCompetitor("Econika"));
                 setLogMessage(sb.append("Завершена выгрузка Econika: " + df.format(new Date())).append("\r\n").toString());
         }
         if(chkMascotte == true){
             setLogMessage(sb.append("Началась выгрузка Mascotte: " + df.format(new Date())).append("\r\n").toString());
+            priceService.deletePriceByDate("Mascotte", new Date());
             MascotteParse mascotteParse = new MascotteParse(inventTableService, priceService);
             mascotteParse.run(referenceService.findByCompetitor("Mascotte"));
             setLogMessage(sb.append("Завершена выгрузка Mascotte: " + df.format(new Date())).append("\r\n").toString());
