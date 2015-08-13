@@ -176,19 +176,14 @@ public class MascotteParse {
     public void writeDB(List<InventTable> items, List<PricesCompetitors> prices){
 
         SimpleDateFormat df = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
-        System.out.println("�������� ������ � ���� ������:  " + df.format(new Date()));
-        System.out.println("���-�� ����������� ���: " + prices.size());
 
-        //�������� ������ ��������
         for(InventTable inventTable : items) {
             if(inventTableService.findScu(inventTable) == null){inventTableService.persistScu(inventTable);}
         }
-        //������ ����
         for(PricesCompetitors price : prices) {
             priceService.persistPrices(price);
         }
-        System.out.println("����������� ������ � ���� ������: " + df.format(new Date()));
-        System.out.println("���-�� �� ����������� SCU: " + timeoutErrors);
+
 
     }
 

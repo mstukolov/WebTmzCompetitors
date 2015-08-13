@@ -94,11 +94,11 @@ public class EconikaParse {
         String countryElement = new String("Страна производства".getBytes("UTF8"));
 
         String upper= "", lining = "", sole = "", country = "";
-
-        upper = trimElement(pElems.get(1).text());
-        sole =  trimElement(pElems.get(3).text());
-        lining =  trimElement(pElems.get(2).text());
-
+        try{
+            upper = trimElement(pElems.get(1).text());
+            sole =  trimElement(pElems.get(3).text());
+            lining =  trimElement(pElems.get(2).text());
+        }catch (IndexOutOfBoundsException ex){System.out.println("Item Page is not filled.");}
 
         PricesCompetitors nPrice =
                 new PricesCompetitors("Econika",  //�����

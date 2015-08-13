@@ -12,6 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
@@ -81,7 +82,6 @@ public class MainManagedBean implements Serializable {
                 setLogMessage(sb.append("Завершена выгрузка Tj: " + df.format(new Date())).append("\r\n").toString());
         }
         if(chkEcco == true){
-
                 setLogMessage(sb.append("Началась выгрузка Ecco: " + df.format(new Date())).append("\r\n").toString());
                 priceService.deletePriceByDate("Ecco", new Date());
                 EccoParse eccoParse = new EccoParse(inventTableService, priceService);

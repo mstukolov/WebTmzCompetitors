@@ -12,7 +12,7 @@
     <title><ui:insert name="title">TMZ</ui:insert></title>
 </h:head>
    <f:view>
-      <p:outputLabel value="Север Мониторинга Цен конкурентов" style="font-size:48px; width: 350px; height: 40px"/>
+      <p:outputLabel value="Сервер Мониторинга Цен конкурентов" style="font-size:48px; width: 350px; height: 40px"/>
    </f:view>
    <h:body>
 
@@ -27,25 +27,19 @@
 
                    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
                        <h:outputText value="Ecco: " />
-                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkEcco}">
-                           <p:ajax update="@form" listener="#{mainManagedBean.addMessage('Ecco is checked')}" />
-                       </p:selectBooleanCheckbox>
+                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkEcco}"/>
+
                        <h:outputText value="CarloPazolini: " />
-                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkCarloPazolini}">
-                           <p:ajax update="@form" listener="#{mainManagedBean.addMessage('CarloPazolini is checked')}" />
-                       </p:selectBooleanCheckbox>
+                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkCarloPazolini}"/>
+
                        <h:outputText value="Mascotte: " />
-                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkMascotte}">
-                           <p:ajax update="@form" listener="#{mainManagedBean.addMessage('Mascotte is checked')}" />
-                       </p:selectBooleanCheckbox>
+                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkMascotte}"/>
+
                        <h:outputText value="Tj: " />
-                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkTj}">
-                           <p:ajax update="@form" listener="#{mainManagedBean.addMessage('Tj is checked')}" />
-                       </p:selectBooleanCheckbox>
+                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkTj}"/>
+
                        <h:outputText value="Econika: " />
-                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkEconika}">
-                           <p:ajax update="@form" listener="#{mainManagedBean.addMessage('Econika is checked')}" />
-                       </p:selectBooleanCheckbox>
+                       <p:selectBooleanCheckbox value="#{mainManagedBean.chkEconika}"/>
                    </h:panelGrid>
 
                    <br/><br/>
