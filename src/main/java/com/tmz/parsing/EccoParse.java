@@ -20,16 +20,7 @@ import java.util.List;
  * Created by stukolov_m on 27.05.2015.
  */
 
-public class EccoParse {
-
-    public static Integer i = 0, timeoutErrors= 0;
-    public static String category = "";
-
-    public static List<InventTable> items = new ArrayList<InventTable>();
-    public static List<PricesCompetitors> prices = new ArrayList<PricesCompetitors>();
-
-    InventTableService inventTableService;
-    PricesCompetitorsService priceService;
+public class EccoParse extends AbstractParse{
 
     public EccoParse(InventTableService inventTableService, PricesCompetitorsService priceService) {
         this.inventTableService = inventTableService;
@@ -45,9 +36,9 @@ public class EccoParse {
 
         for(Reference url : urls){
 
-            if       (url.getReference().contains("/men/")) {category = "мужская";}
-            else if  (url.getReference().contains("/women/")){category = "женская";}
-            else if  (url.getReference().contains("/kids/")){category = "детская";}
+            if       (url.getReference().contains("/men/")) {category = "men";}
+            else if  (url.getReference().contains("/women/")){category = "women";}
+            else if  (url.getReference().contains("/kids/")){category = "kids";}
 
             System.out.println("Start parse URL = " + url.getReference());
 
@@ -67,7 +58,7 @@ public class EccoParse {
         }
         writeDB(items, prices);
     }
-    private static void printPrices(String scu, String category) throws IOException {
+    private void printPrices(String scu, String category) throws IOException {
         try {
             Document docSCU = Jsoup.connect(scu).get();
             String item = "", price = "", priceFirst = "", kindshoes = "";
@@ -84,7 +75,7 @@ public class EccoParse {
 
             Elements pElems = docSCU.select("div.main > dl");
 
-            parseElements(item, kindshoes, Integer.valueOf(price), Integer.valueOf(priceFirst), category, pElems);
+            parseElements("Ecco", item, kindshoes, Integer.valueOf(price), Integer.valueOf(priceFirst), category, pElems);
 
             i++;
             System.out.println("SCU #: " + item + " , " + Integer.valueOf(price.split(" ")[0])
@@ -92,87 +83,5 @@ public class EccoParse {
 
         }catch (java.net.SocketException ex){System.out.println("java.net.SocketException: Connection reset");}
     }
-    public static void parseElements(String scu, String kindshoes,
-                                     Integer price, Integer priceFirst,
-                                     String category, Elements pElems) throws UnsupportedEncodingException {
-        String upperMaterial = new String("Верх".getBytes("UTF8"));
-        String soleMaterial = new String("Подошва".getBytes("UTF8"));
-        String liningMaterial = new String("Подкладка".getBytes("UTF8"));
-        String countryElement = new String("Страна производства".getBytes("UTF8"));
 
-        String upper= "", lining = "", sole = "", country = "";
-
-
-        for(Element element: pElems){
-            if(element.text().indexOf(upperMaterial) != -1){upper = trimElement(element.select("span.show_1").text());}
-            else if(element.text().indexOf(soleMaterial) != -1){sole =  trimElement(element.select("span.show_1").text());}
-            else if(element.text().indexOf(liningMaterial) != -1){lining =  trimElement(element.select("span.show_1").text());}
-            else if(element.text().indexOf(countryElement) != -1){country = trimElement(element.select("span.show_1").text());}
-
-        }
-        PricesCompetitors nPrice =
-                new PricesCompetitors("Ecco",  //�����
-                        scu,              //�������
-                        new Date(),       //���� ����
-                        price,            //����
-                        priceFirst        //������ ����
-                );
-
-        InventTable inventTable =
-                new InventTable(scu.replaceAll(" ", ""),
-                        "Ecco",
-                        new String(category.getBytes(),"utf-8"),
-                        kindshoes,
-                        new String(upper.getBytes(), "utf8"),
-                        lining,
-                        "",
-                        "",
-                        sole,
-                        country,
-                        new Date());
-        items.add(inventTable);
-        prices.add(nPrice);
-    }
-
-    public void writeDB(List<InventTable> items, List<PricesCompetitors> prices){
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
-        System.out.println("�������� ������ � ���� ������:  " + df.format(new Date()));
-        System.out.println("���-�� ����������� ���: " + prices.size());
-
-//        InventTableService inventTableService = (InventTableService) context.getBean("inventTableService");
-//        PricesCompetitorsService priceService = (PricesCompetitorsService) context.getBean("pricesCompetitorsService");
-
-        //�������� ������ ��������
-        for(InventTable inventTable : items) {
-            if(inventTableService.findScu(inventTable) == null){inventTableService.persistScu(inventTable);}
-        }
-        //������ ����
-        for(PricesCompetitors price : prices) {
-            priceService.persistPrices(price);
-        }
-        System.out.println("����������� ������ � ���� ������: " + df.format(new Date()));
-        System.out.println("���-�� �� ����������� SCU: " + timeoutErrors);
-
-    }
-    public static String  trimElement(String s){
-
-        return (s.substring(s.lastIndexOf(":") + 1)).replaceAll(" ", "");
-    }
-
-    public InventTableService getInventTableService() {
-        return inventTableService;
-    }
-
-    public void setInventTableService(InventTableService inventTableService) {
-        this.inventTableService = inventTableService;
-    }
-
-    public PricesCompetitorsService getPriceService() {
-        return priceService;
-    }
-
-    public void setPriceService(PricesCompetitorsService priceService) {
-        this.priceService = priceService;
-    }
 }

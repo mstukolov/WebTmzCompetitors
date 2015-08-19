@@ -19,16 +19,8 @@ import java.util.List;
 /**
  * Created by stukolov_m on 10.06.2015.
  */
-public class EconikaParse {
+public class EconikaParse extends AbstractParse{
 
-    InventTableService inventTableService;
-    PricesCompetitorsService priceService;
-
-    public static Integer i = 0, timeoutErrors= 0;
-    public static String category = "";
-    public static List<InventTable> items = new ArrayList<InventTable>();
-    public static List<PricesCompetitors> prices = new ArrayList<PricesCompetitors>();
-    public static List<String> errUpload = new ArrayList<String>();
 
     public EconikaParse(InventTableService inventTableService, PricesCompetitorsService priceService) {
         this.inventTableService = inventTableService;
@@ -36,7 +28,7 @@ public class EconikaParse {
     }
 
     public void run(List<Reference> urls) throws IOException {
-        category = "женская";
+        category = "woman";
         i = 0;
         //Удаление элементов с последней сессии загрузки
         prices.clear();
@@ -61,7 +53,7 @@ public class EconikaParse {
         writeDB(items, prices);
         printErrors();
     }
-    private static void printPrices(String scu, String category) throws IOException {
+    private void printPrices(String scu, String category) throws IOException {
 
         Document docSCU = Jsoup.connect(scu).get();
         String item = "", price = "", priceFirst = "", kindshoes = "";
@@ -70,7 +62,7 @@ public class EconikaParse {
         item = docSCU.select("div.item-attr > dl > dd").get(0).text();
         price = docSCU.select(".price-current").first().text().split(" ")[0].replaceAll("\\D", "");
 
-        //STUM 16.01.2015 ���������� �����������(������) ����-------
+
         try {
             priceFirst = docSCU.select(".price-old").first().text().split(" ")[0].replaceAll("\\D", "");
         }catch(NullPointerException ex){priceFirst = price;}
@@ -78,76 +70,12 @@ public class EconikaParse {
 
         Elements  pElems = docSCU.select("div.item-attr > dl > dd");
 
-        parseElements(item, kindshoes, Integer.valueOf(price), Integer.valueOf(priceFirst), category, pElems);
+        parseElements("Econika", item, kindshoes, Integer.valueOf(price), Integer.valueOf(priceFirst), category, pElems);
 
         i++;
         System.out.println("SCU #: " + item + " , " + Integer.valueOf(price.split(" ")[0])
                 + " , " + Integer.valueOf(priceFirst.split(" ")[0]) + " , "+ i);
     }
-    public static void parseElements(String scu, String kindshoes,
-                                     Integer price,
-                                     Integer priceFirst,
-                                     String category, Elements pElems) throws UnsupportedEncodingException {
-        String upperMaterial = new String("Материал верха".getBytes("UTF8"));
-        String soleMaterial = new String("Материал подошвы".getBytes("UTF8"));
-        String liningMaterial = new String("Материал подкладки".getBytes("UTF8"));
-        String countryElement = new String("Страна производства".getBytes("UTF8"));
 
-        String upper= "", lining = "", sole = "", country = "";
-        try{
-            upper = trimElement(pElems.get(1).text());
-            sole =  trimElement(pElems.get(3).text());
-            lining =  trimElement(pElems.get(2).text());
-        }catch (IndexOutOfBoundsException ex){System.out.println("Item Page is not filled.");}
 
-        PricesCompetitors nPrice =
-                new PricesCompetitors("Econika",  //�����
-                        scu,              //�������
-                        new Date(),       //���� ����
-                        price,            //����
-                        priceFirst        //������ ����
-                );
-
-        InventTable inventTable =
-                new InventTable(scu,
-                        "Econika",
-                        new String(category.getBytes(),"utf-8"),
-                        kindshoes,
-                        new String(upper.getBytes(), "utf8"),
-                        lining,
-                        "",
-                        "",
-                        sole,
-                        country,
-                        new Date());
-        items.add(inventTable);
-        prices.add(nPrice);
-    }
-
-    public void writeDB(List<InventTable> items, List<PricesCompetitors> prices){
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
-        System.out.println("�������� ������ � ���� ������:  " + df.format(new Date()));
-        System.out.println("���-�� ����������� ���: " + prices.size());
-
-        //�������� ������ ��������
-        for(InventTable inventTable : items) {
-            if(inventTableService.findScu(inventTable) == null){inventTableService.persistScu(inventTable);}
-        }
-        //������ ����
-        for(PricesCompetitors price : prices) {
-            priceService.persistPrices(price);
-        }
-        System.out.println("����������� ������ � ���� ������: " + df.format(new Date()));
-        System.out.println("���-�� �� ����������� SCU: " + timeoutErrors);
-
-    }
-    public static void printErrors(){
-        if(errUpload.size() > 0){ for(String err : errUpload){System.out.println(err);}}
-        else{System.out.println("������ �� ����������");}
-    }
-    public static String  trimElement(String s){
-
-        return s.substring(s.lastIndexOf(":") + 1);
-    }
 }
