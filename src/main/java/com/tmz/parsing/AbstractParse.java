@@ -2,6 +2,7 @@ package com.tmz.parsing;
 
 import com.tmz.db.model.InventTable;
 import com.tmz.db.model.PricesCompetitors;
+import com.tmz.db.model.Reference;
 import com.tmz.db.service.InventTableService;
 import com.tmz.db.service.PricesCompetitorsService;
 import org.jsoup.Jsoup;
@@ -124,5 +125,8 @@ public class AbstractParse {
         Element element = Jsoup.connect("http://www.carlopazolini.com/ru/collection/women/shoes/pumps/fl-zel5-3").get().body();
         nonclasslnk.add(element);
         return nonclasslnk;
+    }
+    public void run(List<Reference> urls) throws IOException {
+        System.out.println("Your inside abstract class");
     }
 }
